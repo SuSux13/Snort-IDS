@@ -1,0 +1,74 @@
+$sudo apt-get install tasksel
+$sudo tasksel install lamp-server
+
+/* Se crea la tabla de SQL. /*
+
+/* snort, puede ser el usuario root/*
+
+
+$ mysql -u root -p
+# create database snort;
+# GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE
+  TEMPORARY TABLES, LOCK TABLES ON snort.* TO 'snort'@'localhost'  # IDENTIFIED BY 'mycontraseña';
+# FLUSH PRIVILEGES;
+# quit
+
+$sudo apt-get install snort
+
+/* Se actualiza el snort, con la base de datos. /*
+
+
+$ pushd /usr/share/doc/snort
+$ sudo zcat create_mysql.gz | mysql -u snort -p snort
+
+/* Poner la contraseña de nuestro SQL /*
+
+$mysql -u root -p 
+$nano  /etc/snort/snort.conf
+
+/* Buscar la siguiente frase y modificarla con nuestra propia información /*
+
+output\ log_tcpdump:\ tcpdump.log\noutput\
+  database:\ log,\ mysql, user=snort password=password dbname=snort host=localhost/" /etc/snort/snort.conf
+
+
+$ sudo rm -rf /etc/snort/db-pending-config
+$ sudo /etc/init.d/snort start
+
+/* Verificar si se ha configurado correctamente /*
+
+$ sudo /etc/init.d/snort status
+$ tail /var/log/daemon.log
+
+
+/* CMD Ipconfig & mask, con mi propia información /*
+
+
+$nano  /etc/acidbase/apache.conf
+
+#allow\ from\ 127.0.0.0/255.0.0.0
+#allow\ from\
+  127.0.0.0/255.0.0.0\ 10.10.1.10/255.255.255.0
+  
+  
+$ sudo /etc/init.d/apache2 restart
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
